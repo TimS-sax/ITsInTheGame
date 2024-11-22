@@ -8,6 +8,24 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class BasicGame implements GameLoop {
+    int fouten = 0;
+
+    String[] galgstappen = {
+            "50,50,100,100",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"
+            // maak format x1,y1,x2,y2
+    };
 
     public static void main(String[] args) {
         SaxionApp.startGameLoop(new BasicGame(), 1280, 775, 40);
@@ -23,6 +41,27 @@ public class BasicGame implements GameLoop {
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.drawBorderedText("Hangen maar!", 150, 100, 150);
 
+    }
+
+    public void galgUI() {
+        for (int i = 0; i <= fouten; i++) {
+            //run hier de stappen voor het tekenen van de galg, i is welke stap je moet hebben
+            String[] coordinates = galgstappen[i].split(",");
+            int x1 = Integer.parseInt(coordinates[0]);
+            int y1 = Integer.parseInt(coordinates[1]);
+            int x2 = Integer.parseInt(coordinates[2]);
+            int y2 = Integer.parseInt(coordinates[3]);
+            SaxionApp.drawLine(x1, y1, x2, y2);
+        }
+    }
+
+    public void foutGok() {
+        if (fouten < 13) {
+            fouten++;
+        } else if (fouten == 13) {
+           //verlies conditie
+        }
+        galgUI();
     }
 
     @Override
