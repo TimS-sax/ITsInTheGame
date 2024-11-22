@@ -37,13 +37,13 @@ public class BasicGame implements GameLoop {
     }
 
     public void startScreen() {
+        // Titel muziek
+        SaxionApp.playSound("BasicGame/resources/background music.wav");
+
         // Game maker credits
         SaxionApp.setFill(Color.white);
         SaxionApp.setBorderSize(0);
         SaxionApp.drawBorderedText("Game makers: Joshua, Kjeld, Tim & Mats", 5, 760, 11);
-
-        // Titel muziek
-        SaxionApp.playSound("BasicGame/resources/background music.wav");
 
         // Game titel
         SaxionApp.setFill(Color.white);
