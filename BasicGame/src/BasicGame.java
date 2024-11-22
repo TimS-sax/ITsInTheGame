@@ -14,15 +14,31 @@ public class BasicGame implements GameLoop {
     }
 
     public void background() {
-        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0,0, 1280,775);
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
     }
 
     public void startScreen() {
+        // Game titel
         SaxionApp.setFill(Color.white);
         SaxionApp.setBorderSize(10);
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.drawBorderedText("Hangen maar!", 150, 100, 150);
 
+        // Game maker credits
+        SaxionApp.drawBorderedText("Game makers: Joshua, Kjeld, Tim & Mats", 5, 760, 11);
+
+        // De 9 thema's met de boxen eromheen
+        SaxionApp.drawBorderedText("Beroepen", 280, 450, 15);
+        SaxionApp.drawBorderedText("Dieren", 590, 450, 15);
+        SaxionApp.drawBorderedText("Eten en Drinken",850, 450, 15);
+
+        SaxionApp.drawBorderedText("Feestdagen", 275, 550, 15);
+        SaxionApp.drawBorderedText("Kleuren", 585, 550, 15);
+        SaxionApp.drawBorderedText("Landen", 875, 550, 15);
+
+        SaxionApp.drawBorderedText("Planten en Bloemen", 250, 650, 15);
+        SaxionApp.drawBorderedText("Sporten", 585, 650, 15);
+        SaxionApp.drawBorderedText("Transportmiddelen", 840, 650, 15);
     }
 
     @Override
@@ -89,14 +105,12 @@ public class BasicGame implements GameLoop {
                     SaxionApp.printLine();
                     loop = false;
 
-                }else {
+                } else {
                     SaxionApp.print("Doe nog een gok: ");
                     gok = SaxionApp.readChar();
                     SaxionApp.print(gok);
                 }
-            }
-
-            else if (!naam.contains(gok)) {
+            } else if (!naam.contains(gok)) {
                 SaxionApp.printLine();
                 SaxionApp.printLine("De gok was fout!", Color.red);
                 verkeerd.add(gok);
@@ -109,9 +123,7 @@ public class BasicGame implements GameLoop {
                 SaxionApp.print("Doe nog een gok: ");
                 gok = SaxionApp.readChar();
                 SaxionApp.print(gok);
-            }
-
-            else if (user.contains(gok)) {
+            } else if (user.contains(gok)) {
                 SaxionApp.printLine();
                 SaxionApp.printLine("Je hebt deze letter al gegokt!", Color.yellow);
                 SaxionApp.printLine();
