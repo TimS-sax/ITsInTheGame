@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class BasicGame implements GameLoop {
 
     public static void main(String[] args) {
-        SaxionApp.startGameLoop(new BasicGame(), 1280, 852, 40);
+        SaxionApp.startGameLoop(new BasicGame(), 1280, 800, 40);
     }
 
     public void background() {
-        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0,0, 1280,852);
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0,0, 1280,800);
     }
 
     public void startScreen() {
