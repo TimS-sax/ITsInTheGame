@@ -25,6 +25,7 @@ public class BasicGame implements GameLoop {
             "12",
             "13"
             // maak format x1,y1,x2,y2
+
     };
 
     public static void main(String[] args) {
