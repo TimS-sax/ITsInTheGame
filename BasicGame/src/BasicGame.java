@@ -22,6 +22,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.setBorderSize(10);
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.drawBorderedText("Hangen maar!", 150, 100, 150);
+
     }
 
     @Override
