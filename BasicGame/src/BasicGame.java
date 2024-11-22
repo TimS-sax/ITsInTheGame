@@ -32,14 +32,55 @@ public class BasicGame implements GameLoop {
     }
 
     public void background() {
-        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0,0, 1280,775);
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
     }
 
     public void startScreen() {
+        // Game maker credits
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderSize(0);
+        SaxionApp.drawBorderedText("Game makers: Joshua, Kjeld, Tim & Mats", 5, 760, 11);
+
+        // Titel muziek
+        SaxionApp.playSound("BasicGame/resources/background music.wav");
+
+        // Game titel
         SaxionApp.setFill(Color.white);
         SaxionApp.setBorderSize(10);
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.drawBorderedText("Hangen maar!", 150, 100, 150);
+
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderColor(Color.black);
+        SaxionApp.setBorderSize(3);
+
+        SaxionApp.drawRectangle(250,440,130,40);
+        SaxionApp.drawRectangle(245,540,155,40);
+        SaxionApp.drawRectangle(220,640,250,40);
+
+        SaxionApp.drawRectangle(560,440,95,40);
+        SaxionApp.drawRectangle(555,540,105,40);
+        SaxionApp.drawRectangle(555,640,105,40);
+
+        SaxionApp.drawRectangle(820,440,205,40);
+        SaxionApp.drawRectangle(845,540,100,40);
+        SaxionApp.drawRectangle(810,640,230,40);
+
+        SaxionApp.setBorderSize(1);
+        SaxionApp.setFill(Color.black);
+        SaxionApp.setBorderColor(Color.black);
+        // De 9 thema's met de boxen eromheen
+        SaxionApp.drawBorderedText("Beroepen", 260, 450, 25);
+        SaxionApp.drawBorderedText("Dieren", 570, 450, 25);
+        SaxionApp.drawBorderedText("Eten en Drinken",830, 450, 25);
+
+        SaxionApp.drawBorderedText("Feestdagen", 255, 550, 25);
+        SaxionApp.drawBorderedText("Kleuren", 565, 550, 25);
+        SaxionApp.drawBorderedText("Landen", 855, 550, 25);
+
+        SaxionApp.drawBorderedText("Planten en Bloemen", 230, 650, 25);
+        SaxionApp.drawBorderedText("Sporten", 565, 650, 25);
+        SaxionApp.drawBorderedText("Transportmiddelen", 820, 650, 25);
 
     }
 
@@ -128,14 +169,12 @@ public class BasicGame implements GameLoop {
                     SaxionApp.printLine();
                     loop = false;
 
-                }else {
+                } else {
                     SaxionApp.print("Doe nog een gok: ");
                     gok = SaxionApp.readChar();
                     SaxionApp.print(gok);
                 }
-            }
-
-            else if (!naam.contains(gok)) {
+            } else if (!naam.contains(gok)) {
                 SaxionApp.printLine();
                 SaxionApp.printLine("De gok was fout!", Color.red);
                 verkeerd.add(gok);
@@ -148,9 +187,7 @@ public class BasicGame implements GameLoop {
                 SaxionApp.print("Doe nog een gok: ");
                 gok = SaxionApp.readChar();
                 SaxionApp.print(gok);
-            }
-
-            else if (user.contains(gok)) {
+            } else if (user.contains(gok)) {
                 SaxionApp.printLine();
                 SaxionApp.printLine("Je hebt deze letter al gegokt!", Color.yellow);
                 SaxionApp.printLine();
