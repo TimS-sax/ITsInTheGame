@@ -114,7 +114,6 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void loop() {
-
     }
 
     @Override
@@ -124,7 +123,41 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void mouseEvent(MouseEvent mouseEvent) {
+        if (mouseEvent.isLeftMouseButton()) {
+            int mouseX = mouseEvent.getX();
+            int mouseY = mouseEvent.getY();
 
+            handleMouseClick(mouseX, mouseY);
+        }
+    }
+
+    private void handleMouseClick(int mouseX, int mouseY) {
+
+        // De output is nog wel 2 keer omdat de mouseclick met indrukken en loslaten is!!
+
+        if (isInsideRectangle(mouseX, mouseY, 250, 440, 130, 40)) {
+            System.out.println("Beroepen");
+        } else if (isInsideRectangle(mouseX, mouseY, 245, 540, 155, 40)) {
+            System.out.println("Feestdagen");
+        } else if (isInsideRectangle(mouseX, mouseY, 220, 640, 250, 40)) {
+            System.out.println("Planten en Bloemen");
+        } else if (isInsideRectangle(mouseX, mouseY, 560, 440, 95, 40)) {
+            System.out.println("Dieren");
+        } else if (isInsideRectangle(mouseX, mouseY, 555, 540, 105, 40)) {
+            System.out.println("Kleuren");
+        } else if (isInsideRectangle(mouseX, mouseY, 555, 640, 105, 40)) {
+            System.out.println("Sporten");
+        } else if (isInsideRectangle(mouseX, mouseY, 820, 440, 205, 40)) {
+            System.out.println("Eten en Drinken");
+        } else if (isInsideRectangle(mouseX, mouseY, 845, 540, 100, 40)) {
+            System.out.println("Landen");
+        } else if (isInsideRectangle(mouseX, mouseY, 810, 640, 230, 40)) {
+            System.out.println("Transportmiddelen");
+        }
+    }
+
+    private boolean isInsideRectangle(int mouseX, int mouseY, int rectX, int rectY, int rectWidth, int rectHeight) {
+        return mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight;
     }
 
     public void teringzooi() {
