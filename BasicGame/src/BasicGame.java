@@ -55,6 +55,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.setBorderSize(3);
 
+        // Vakjes keuze scherm om de thema's heen
         SaxionApp.drawRectangle(250, 440, 130, 40);
         SaxionApp.drawRectangle(245, 540, 155, 40);
         SaxionApp.drawRectangle(220, 640, 250, 40);
@@ -70,7 +71,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.setBorderSize(1);
         SaxionApp.setFill(Color.black);
         SaxionApp.setBorderColor(Color.black);
-        // De 9 thema's met de boxen eromheen
+        // De 9 thema's in tekst
         SaxionApp.drawBorderedText("Beroepen", 260, 450, 25);
         SaxionApp.drawBorderedText("Dieren", 570, 450, 25);
         SaxionApp.drawBorderedText("Eten en Drinken", 830, 450, 25);
@@ -122,6 +123,7 @@ public class BasicGame implements GameLoop {
         }
     }
 
+    // Output na het klikken van de vakjes van het keuze scherm
     private void handleMouseClick(int mouseX, int mouseY) {
 
         // De output is nog wel 2 keer omdat de mouseclick met indrukken en loslaten is!!
@@ -147,6 +149,7 @@ public class BasicGame implements GameLoop {
         }
     }
 
+    // Kijkt of de muis in de vakjes van het keuze scherm zitten
     private boolean isInsideRectangle(int mouseX, int mouseY, int rectX, int rectY, int rectWidth, int rectHeight) {
         return mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight;
     }
