@@ -213,7 +213,7 @@ public class BasicGame implements GameLoop {
                 verkeerd.add(gok);
                 if (fout < 13) {
                     fout++;
-                    SaxionApp.printLine("Je hebt nu " + fout + " fouten");
+                    SaxionApp.printLine("Je hebt nu " + fout + " fouten",Color.red);
                     SaxionApp.print("Dit zijn je gegokte verkeerde letters: ");
                     SaxionApp.print(verkeerd);
                     SaxionApp.printLine();
@@ -222,7 +222,7 @@ public class BasicGame implements GameLoop {
                     gok = SaxionApp.readChar();
                     SaxionApp.print(gok);
                 } else {
-                    SaxionApp.printLine("Je bent af");
+                    SaxionApp.printLine("Je bent af",Color.red);
                 }
                 galgUI();
             } else if (user.contains(gok)) {
