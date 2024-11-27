@@ -224,10 +224,10 @@ public class BasicGame implements GameLoop {
                     SaxionApp.print("Doe nog een gok: ");
                     gok = SaxionApp.readChar();
                     SaxionApp.print(gok);
+                    galgUI();
                 } else {
                     SaxionApp.printLine("Je bent af",Color.red);
                 }
-                galgUI();
             } else if (user.contains(gok)) {
                 SaxionApp.printLine();
                 SaxionApp.printLine("Je hebt deze letter al gegokt!", Color.yellow);
