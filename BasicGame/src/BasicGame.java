@@ -115,18 +115,18 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void mouseEvent(MouseEvent mouseEvent) {
-        if (mouseEvent.isLeftMouseButton()) {
-            int mouseX = mouseEvent.getX();
-            int mouseY = mouseEvent.getY();
+        if (mouseEvent.isMouseDown()) {
+            if (mouseEvent.isLeftMouseButton()) {
+                int mouseX = mouseEvent.getX();
+                int mouseY = mouseEvent.getY();
 
-            handleMouseClick(mouseX, mouseY);
+                handleMouseClick(mouseX, mouseY);
+            }
         }
     }
 
     // Output na het klikken van de vakjes van het keuze scherm
     private void handleMouseClick(int mouseX, int mouseY) {
-
-        // De output is nog wel 2 keer omdat de mouseclick met indrukken en loslaten is!!
 
         if (isInsideRectangle(mouseX, mouseY, 250, 440, 130, 40)) {
             System.out.println("Beroepen");
