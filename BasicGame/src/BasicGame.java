@@ -164,7 +164,7 @@ public class BasicGame implements GameLoop {
 
     public void woord() {
         SaxionApp.print("Hoeveel letters bevat het woord?: ");
-        int aantalletters = SaxionApp.readInt();
+        aantalletters = SaxionApp.readInt();
         SaxionApp.print("Dit is het woord: ");
         for (int tel = 0; tel < aantalletters; tel++) {
             char letter = SaxionApp.readChar();
