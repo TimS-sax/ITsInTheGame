@@ -8,6 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class BasicGame implements GameLoop {
     int fouten = 0;
 
@@ -245,5 +248,37 @@ public class BasicGame implements GameLoop {
                 }
             }
         }
+
+
+
+
+    public static void appendRowToCSV(String filePath, String[] newRow) {
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            // nieuwe rij in csv maken
+            for (int i = 0; i < newRow.length; i++) {
+                writer.append(newRow[i]);
+                if (i < newRow.length - 1) {
+                    writer.append(","); // , als nodig is
+                }
+            }
+            writer.append("\n"); // nieuwe lijn
+
+            System.out.println("Data appended successfully!");
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing to the file: " + e.getMessage());
+        }
     }
+
+    public static void csvtoevoegen(String[] args) {
+        // Path to the existing CSV file
+        String filePath = "score.csv";
+
+        // Data die moet worden verstuurd
+        String[] newRow = {"Jane", "Doe", "30"};
+
+        // Call the method to append data
+        appendRowToCSV(filePath, newRow);
+        
+    }
+}
 
