@@ -187,8 +187,8 @@ public class BasicGame implements GameLoop {
                 if (naam.contains(gok)) {
                     int countCorrect = 0;
 
-                    for (Character character : naam) {
-                        if (character == gok && !user.contains(gok)) {
+                    for (int i = 0; i < naam.size(); i++) {
+                        if (naam.get(i) == gok && !user.contains(gok)) {
                             user.add(gok);
                             goed++;
                             countCorrect++;
