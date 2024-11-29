@@ -6,24 +6,25 @@ import nl.saxion.app.interaction.MouseEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BasicGame implements GameLoop {
     int fouten = 0;
 
     String[] galgstappen = {
-            "50,50,100,100",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13"
+            "250,200,300,200", // "_"
+            "250,200,275,175", // "/"
+            "300,200,275,175", // "\"
+            "275,175,275,125", // "|"
+            "275,125,325,125", // "-"
+            "275,135,285,125", // "/"
+            "325,125,325,140", // "|"
+            "circle", // "325,145,5"
+            "325,150,325,160", // "|"
+            "325,155,315,145", // "\"
+            "325,155,335,145", // "/"
+            "325,160,315,165", // "/"
+            "325,160,335,165", // "\"
             // maak format x1,y1,x2,y2
 
     };
@@ -88,13 +89,17 @@ public class BasicGame implements GameLoop {
 
     public void galgUI() {
         for (int i = 0; i <= fouten; i++) {
-            //run hier de stappen voor het tekenen van de galg, i is welke stap je moet hebben
-            String[] coordinates = galgstappen[i].split(",");
-            int x1 = Integer.parseInt(coordinates[0]);
-            int y1 = Integer.parseInt(coordinates[1]);
-            int x2 = Integer.parseInt(coordinates[2]);
-            int y2 = Integer.parseInt(coordinates[3]);
-            SaxionApp.drawLine(x1, y1, x2, y2);
+            //run hier de stappen voor het tekenen van de galg, i is welke stap je moet
+            if (Objects.equals(galgstappen[i], "circle")) {
+                SaxionApp.drawCircle(325,140,5);
+            } else {
+                String[] coordinates = galgstappen[i].split(",");
+                int x1 = Integer.parseInt(coordinates[0]);
+                int y1 = Integer.parseInt(coordinates[1]);
+                int x2 = Integer.parseInt(coordinates[2]);
+                int y2 = Integer.parseInt(coordinates[3]);
+                SaxionApp.drawLine(x1, y1, x2, y2);
+            }
         }
     }
 
