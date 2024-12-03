@@ -5,6 +5,7 @@ import nl.saxion.app.interaction.KeyboardEvent;
 import nl.saxion.app.interaction.MouseEvent;
 
 import java.awt.*;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -39,6 +40,19 @@ public class BasicGame implements GameLoop {
     public void background() {
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
     }
+
+    // reader
+    Reader reader = new Reader() {
+        @Override
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            return 0;
+        }
+
+        @Override
+        public void close() throws IOException {
+
+        }
+    };
 
     public void startScreen() {
         // Titel muziek
