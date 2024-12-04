@@ -1,3 +1,4 @@
+import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
 import nl.saxion.app.interaction.GameLoop;
@@ -42,17 +43,19 @@ public class BasicGame implements GameLoop {
     }
 
     // reader
-    Reader reader = new Reader() {
-        @Override
-        public int read(char[] cbuf, int off, int len) throws IOException {
-            return 0;
-        }
+    public static ArrayList beroepen = new ArrayList();
 
-        @Override
-        public void close() throws IOException {
+    public void reader () {
+        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
 
+        while (reader.loadRow()) {
+            String woord = reader.getString(0);
+            beroepen.add(woord);
         }
-    };
+        int randomBeroepNummer = SaxionApp.getRandomValueBetween(0, beroepen.size());
+        String randomBeroep = beroepen.get(randomBeroepNummer).toString();
+        System.out.println(randomBeroep);
+    }
 
     public void startScreen() {
         // Titel muziek
@@ -124,6 +127,7 @@ public class BasicGame implements GameLoop {
     public void init() {
         background();
         startScreen();
+        reader();
     }
 
     @Override
