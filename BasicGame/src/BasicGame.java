@@ -42,21 +42,6 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
     }
 
-    // reader
-    public static ArrayList beroepen = new ArrayList();
-
-    public void reader () {
-        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
-
-        while (reader.loadRow()) {
-            String woord = reader.getString(0);
-            beroepen.add(woord);
-        }
-        int randomBeroepNummer = SaxionApp.getRandomValueBetween(0, beroepen.size());
-        String randomBeroep = beroepen.get(randomBeroepNummer).toString();
-        System.out.println(randomBeroep);
-    }
-
     public void startScreen() {
         // Titel muziek
         SaxionApp.playSound("BasicGame/resources/background music.wav");
@@ -180,6 +165,20 @@ public class BasicGame implements GameLoop {
         return mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight;
     }
 
+    // reader
+    public static ArrayList woordenlijst = new ArrayList();
+
+    public void reader () {
+        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
+
+        while (reader.loadRow()) {
+            String woord = reader.getString(0);
+            woordenlijst.add(woord);
+        }
+        int randomBeroepNummer = SaxionApp.getRandomValueBetween(0, woordenlijst.size());
+        String randomBeroep = woordenlijst.get(randomBeroepNummer).toString();
+        System.out.println(randomBeroep);
+    }
 
     // ALle integers en arraylists voor beurten en goedoffout
     public static int goed = 0;
