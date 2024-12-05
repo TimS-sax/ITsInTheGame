@@ -269,6 +269,30 @@ public class BasicGame implements GameLoop {
 
 
 
+// score uitrekenen
+    public void score(int gameStatus) {
+        if (gameStatus == 0) { // Player wint
+            int finalscore = naam.size() - fouten;
+
+            //stuur data naar csv?
+
+
+
+        } else if (gameStatus == 1) { // Player verliest
+
+            //laat totale score zien (score die is opgeslagen + de huidige score)
+
+
+            //=laat highscore zien
+
+        }
+    }
+
+
+
+
+
+// data naar csv sturen
     public static void appendRowToCSV(String filePath, String[] newRow) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
             // nieuwe rij in csv maken
