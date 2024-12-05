@@ -175,8 +175,8 @@ public class BasicGame implements GameLoop {
             String woord = reader.getString(0);
             woordenlijst.add(woord);
         }
-        int randomBeroepNummer = SaxionApp.getRandomValueBetween(0, woordenlijst.size());
-        String randomBeroep = woordenlijst.get(randomBeroepNummer).toString();
+        int randomWoord = SaxionApp.getRandomValueBetween(0, woordenlijst.size());
+        String randomBeroep = woordenlijst.get(randomWoord).toString();
         System.out.println(randomBeroep);
     }
 
