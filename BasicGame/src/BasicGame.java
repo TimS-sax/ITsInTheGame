@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class BasicGame implements GameLoop {
+    private boolean laatThemaSchermZien = false;
     int fouten = 0;
 
     String[] galgstappen = {
@@ -34,63 +35,15 @@ public class BasicGame implements GameLoop {
 
     };
 
+    String[] themas = {
+            "Dieren", "Beroepen", "Eten en Drinken", "Feestdagen",
+            "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
+    };
+
     public static void main(String[] args) {
         SaxionApp.startGameLoop(new BasicGame(), 1280, 775, 40);
     }
 
-    public void background() {
-        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
-    }
-
-    public void startScreen() {
-        // Titel muziek
-        SaxionApp.playSound("BasicGame/resources/background music.wav");
-
-        // Game maker credits
-        SaxionApp.setFill(Color.white);
-        SaxionApp.setBorderSize(0);
-        SaxionApp.drawBorderedText("Game makers: Joshua, Kjeld, Tim & Mats", 5, 760, 11);
-
-        // Game titel
-        SaxionApp.setFill(Color.white);
-        SaxionApp.setBorderSize(10);
-        SaxionApp.setBorderColor(Color.black);
-        SaxionApp.drawBorderedText("Hangen maar!", 150, 100, 150);
-
-        SaxionApp.setFill(Color.white);
-        SaxionApp.setBorderColor(Color.black);
-        SaxionApp.setBorderSize(3);
-
-        // Vakjes keuze scherm om de thema's heen
-        SaxionApp.drawRectangle(250, 440, 130, 40);
-        SaxionApp.drawRectangle(245, 540, 155, 40);
-        SaxionApp.drawRectangle(220, 640, 250, 40);
-
-        SaxionApp.drawRectangle(560, 440, 95, 40);
-        SaxionApp.drawRectangle(555, 540, 105, 40);
-        SaxionApp.drawRectangle(555, 640, 105, 40);
-
-        SaxionApp.drawRectangle(820, 440, 205, 40);
-        SaxionApp.drawRectangle(845, 540, 100, 40);
-        SaxionApp.drawRectangle(810, 640, 230, 40);
-
-        SaxionApp.setBorderSize(1);
-        SaxionApp.setFill(Color.black);
-        SaxionApp.setBorderColor(Color.black);
-        // De 9 thema's in tekst
-        SaxionApp.drawBorderedText("Beroepen", 260, 450, 25);
-        SaxionApp.drawBorderedText("Dieren", 570, 450, 25);
-        SaxionApp.drawBorderedText("Eten en Drinken", 830, 450, 25);
-
-        SaxionApp.drawBorderedText("Feestdagen", 255, 550, 25);
-        SaxionApp.drawBorderedText("Kleuren", 565, 550, 25);
-        SaxionApp.drawBorderedText("Landen", 855, 550, 25);
-
-        SaxionApp.drawBorderedText("Planten en Bloemen", 230, 650, 25);
-        SaxionApp.drawBorderedText("Sporten", 565, 650, 25);
-        SaxionApp.drawBorderedText("Transportmiddelen", 820, 650, 25);
-
-    }
 
     public void galgUI() {
         for (int i = 0; i <= fouten; i++) {
@@ -110,13 +63,16 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void init() {
-        background();
-        startScreen();
+        SaxionApp.playSound("BasicGame/resources/background music.wav");
+        maakStartMenu();
         reader();
     }
 
     @Override
     public void loop() {
+        if (laatThemaSchermZien) {
+            maakThemaScherm();
+        }
     }
 
     @Override
@@ -126,41 +82,74 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void mouseEvent(MouseEvent mouseEvent) {
-        if (mouseEvent.isMouseDown()) {
-            if (mouseEvent.isLeftMouseButton()) {
-                int mouseX = mouseEvent.getX();
-                int mouseY = mouseEvent.getY();
+        if (mouseEvent.isMouseDown() && mouseEvent.isLeftMouseButton()) {
+            int mouseX = mouseEvent.getX();
+            int mouseY = mouseEvent.getY();
 
-                handleMouseClick(mouseX, mouseY);
+            if (!laatThemaSchermZien) {
+                // Kijkt of de knop voor het thema scherm is aangeklikt
+                if (isInsideRectangle(mouseX, mouseY, 390, 400, 200, 60)) {
+                    laatThemaSchermZien = true;
+                }
+                // Kijkt of de knop om het spel te stoppen is aangeklikt
+                if (isInsideRectangle(mouseX, mouseY, 690, 400, 200, 60)) {
+                    SaxionApp.quit();
+                }
+            } else {
+                // Kijkt welke knop er is gekozen.
+                for (int i = 0; i < themas.length; i++) {
+                    int x = 200 + (i % 3) * 300;
+                    int y = 150 + (i / 3) * 100;
+                    if (isInsideRectangle(mouseX, mouseY, x + 30, y + 200, 200, 60)) {
+                        System.out.println("Thema geselecteerd: " + themas[i]);
+                    }
+                }
             }
         }
     }
 
-    // Output na het klikken van de vakjes van het keuze scherm
-    private void handleMouseClick(int mouseX, int mouseY) {
+    // Begin scherm na het runnen van de applicatie
+    private void maakStartMenu() {
+        SaxionApp.clear();
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
 
-        if (isInsideRectangle(mouseX, mouseY, 250, 440, 130, 40)) {
-            System.out.println("Beroepen");
-        } else if (isInsideRectangle(mouseX, mouseY, 245, 540, 155, 40)) {
-            System.out.println("Feestdagen");
-        } else if (isInsideRectangle(mouseX, mouseY, 220, 640, 250, 40)) {
-            System.out.println("Planten en Bloemen");
-        } else if (isInsideRectangle(mouseX, mouseY, 560, 440, 95, 40)) {
-            System.out.println("Dieren");
-        } else if (isInsideRectangle(mouseX, mouseY, 555, 540, 105, 40)) {
-            System.out.println("Kleuren");
-        } else if (isInsideRectangle(mouseX, mouseY, 555, 640, 105, 40)) {
-            System.out.println("Sporten");
-        } else if (isInsideRectangle(mouseX, mouseY, 820, 440, 205, 40)) {
-            System.out.println("Eten en Drinken");
-        } else if (isInsideRectangle(mouseX, mouseY, 845, 540, 100, 40)) {
-            System.out.println("Landen");
-        } else if (isInsideRectangle(mouseX, mouseY, 810, 640, 230, 40)) {
-            System.out.println("Transportmiddelen");
+        SaxionApp.setFill(Color.white); // Wit
+        SaxionApp.setBorderColor(Color.black); // Zwart
+        SaxionApp.setBorderSize(5);
+        SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
+
+        maakKnop(390, 400, 200, 60, "Thema's");
+        maakKnop(690, 400, 200, 60, "Stop Spel");
+    }
+
+    // Dit is het thema scherm wat je ziet na het start scherm
+    private void maakThemaScherm() {
+        SaxionApp.clear();
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
+
+        for (int i = 0; i < themas.length; i++) {
+            int x = 200 + (i % 3) * 300; // Kolom (3 kolommen)
+            int y = 150 + (i / 3) * 100; // Rij
+            maakKnop(x + 30, y + 200, 200, 60, themas[i]);
+            SaxionApp.setFill(Color.white); // Wit
+            SaxionApp.setBorderColor(Color.black); // Zwart
+            SaxionApp.setBorderSize(5);
+            SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
         }
     }
 
-    // Kijkt of de muis in de vakjes van het keuze scherm zitten
+    // Hiermee worden de knoppen gemaakt
+    private void maakKnop(int x, int y, int width, int height, String text) {
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderColor(Color.black);
+        SaxionApp.setBorderSize(2);
+        SaxionApp.drawRectangle(x, y, width, height);
+
+        SaxionApp.setFill(Color.black);
+        SaxionApp.drawText(text, x + (width - text.length() * 10) / 2, y + (height - 10) / 2, 20);
+    }
+
+    // Kijkt of de muis in de vakjes zitten waar je op kan klikken
     private boolean isInsideRectangle(int mouseX, int mouseY, int rectX, int rectY, int rectWidth, int rectHeight) {
         return mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight;
     }
