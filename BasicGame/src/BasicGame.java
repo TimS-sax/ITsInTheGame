@@ -113,8 +113,8 @@ public class BasicGame implements GameLoop {
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
 
-        SaxionApp.setFill(Color.white); // Wit
-        SaxionApp.setBorderColor(Color.black); // Zwart
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderColor(Color.black);
         SaxionApp.setBorderSize(5);
         SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
 
@@ -128,11 +128,11 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
 
         for (int i = 0; i < themas.length; i++) {
-            int x = 200 + (i % 3) * 300; // Kolom (3 kolommen)
-            int y = 150 + (i / 3) * 100; // Rij
+            int x = 200 + (i % 3) * 300;
+            int y = 150 + (i / 3) * 100;
             maakKnop(x + 30, y + 200, 200, 60, themas[i]);
-            SaxionApp.setFill(Color.white); // Wit
-            SaxionApp.setBorderColor(Color.black); // Zwart
+            SaxionApp.setFill(Color.white);
+            SaxionApp.setBorderColor(Color.black);
             SaxionApp.setBorderSize(5);
             SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
         }
