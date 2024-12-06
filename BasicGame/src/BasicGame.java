@@ -9,9 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class BasicGame implements GameLoop {
     private boolean laatThemaSchermZien = false;
     int fouten = 0;
@@ -34,15 +31,9 @@ public class BasicGame implements GameLoop {
 
     };
 
-    public static String[] themas = {
+    String[] themas = {
             "Dieren", "Beroepen", "Eten en Drinken", "Feestdagen",
             "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
-    };
-
-    public static String[] fileNamen = {
-            "dieren", "beroepen", "etenendrinken", "feestdagen",
-            "kleuren", "landen", "plantenenbloemen", "sporten", "transportmiddelen"
-
     };
 
     public static void main(String[] args) {
@@ -70,6 +61,7 @@ public class BasicGame implements GameLoop {
     public void init() {
         SaxionApp.playSound("BasicGame/resources/background music.wav");
         maakStartMenu();
+        reader();
     }
 
     @Override
@@ -117,8 +109,8 @@ public class BasicGame implements GameLoop {
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
 
-        SaxionApp.setFill(Color.white);
-        SaxionApp.setBorderColor(Color.black);
+        SaxionApp.setFill(Color.white); // Wit
+        SaxionApp.setBorderColor(Color.black); // Zwart
         SaxionApp.setBorderSize(5);
         SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
 
@@ -132,11 +124,11 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
 
         for (int i = 0; i < themas.length; i++) {
-            int x = 200 + (i % 3) * 300;
-            int y = 150 + (i / 3) * 100;
+            int x = 200 + (i % 3) * 300; // Kolom (3 kolommen)
+            int y = 150 + (i / 3) * 100; // Rij
             maakKnop(x + 30, y + 200, 200, 60, themas[i]);
-            SaxionApp.setFill(Color.white);
-            SaxionApp.setBorderColor(Color.black);
+            SaxionApp.setFill(Color.white); // Wit
+            SaxionApp.setBorderColor(Color.black); // Zwart
             SaxionApp.setBorderSize(5);
             SaxionApp.drawBorderedText("Hangen Maar!", 170, 150, 150);
         }
@@ -160,36 +152,9 @@ public class BasicGame implements GameLoop {
 
     // reader
     public static ArrayList woordenlijst = new ArrayList();
-    public static String gekozenThema;
-    public static String themaUitDeLijst;
-    public void reader () {
-        if (themas.equals("Beroepen")) {
-            themaUitDeLijst = "beroepen";
-        }
-        else if (themas.equals("Dieren")) {
-            themaUitDeLijst = "dieren";
-        }
-        else if (themas.equals("Eten en Drinken")) {
-            themaUitDeLijst = "etenendrinken";
-        }
-        else if (themas.equals("Feetstdagen")) {
-            themaUitDeLijst = "feestdagen";
-        }
-        else if (themas.equals("Kleur")) {
-            themaUitDeLijst = "kleur";
-        } else if (themas.equals("Landen")) {
-            themaUitDeLijst = "landen";
-        }
-        else if (themas.equals("Planten en Bloemen")) {
-            themaUitDeLijst = "plantenenbloemen";
-        } else if (themas.equals("Sporten")) {
-            themaUitDeLijst = "sporten";
-        } else if (themas.equals("Transportmiddelen")) {
-            themaUitDeLijst = "transportmiddelen";
-        }
 
-        String gekozenThema = "BasicGame/resources/" +themaUitDeLijst+ ".csv";
-        CsvReader reader = new CsvReader(gekozenThema);
+    public void reader () {
+        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
 
         while (reader.loadRow()) {
             String woord = reader.getString(0);
@@ -286,60 +251,38 @@ public class BasicGame implements GameLoop {
             }
         }
 
-
-
-
-// score uitrekenen
+    int punten = 13;
     public void score(int gameStatus) {
-        if (gameStatus == 0) { // Player wint
-            int finalscore = naam.size() - fouten;
+        if (gameStatus == 0) { // player wint
 
-            //stuur data naar csv?
+            int rondescore = punten - fouten;
+
+            // stuur score naar csv
+            CsvtoevoegenTemp.csvopslaanT(rondescore);
+
+            System.out.println("Score gestuurd naar Highscore.csv!");
+        } else if (gameStatus == 1) { // Player loses
+            //lees uit temp csv and alles optellen
 
 
 
-        } else if (gameStatus == 1) { // Player verliest
+            //haal sum van scores in score temp file + rondescore
+            int currentScore = punten - fouten;
 
-            //laat totale score zien (score die is opgeslagen + de huidige score)
+            // totaale score
+            System.out.println("Total Score: " + currentScore);
 
-
-            //=laat highscore zien
-
+            // high score sturen naar csv
+            CsvtoevoegenHighscore.csvopslaanH(currentScore);
+            // tempscore.csv legen
         }
     }
 
 
-
-
-
-// data naar csv sturen
-    public static void appendRowToCSV(String filePath, String[] newRow) {
-        try (FileWriter writer = new FileWriter(filePath, true)) {
-            // nieuwe rij in csv maken
-            for (int i = 0; i < newRow.length; i++) {
-                writer.append(newRow[i]);
-                if (i < newRow.length - 1) {
-                    writer.append(","); // , als nodig is
-                }
-            }
-            writer.append("\n"); // nieuwe lijn
-
-            System.out.println("Data appended successfully!");
-        } catch (IOException e) {
-            System.err.println("An error occurred while writing to the file: " + e.getMessage());
-        }
-    }
-
-    public static void csvtoevoegen(String[] args) {
-        // Path to the existing CSV file
-        String filePath = "score.csv";
-
-        // Data die moet worden verstuurd
-        String[] newRow = {"Jane", "Doe", "30"};
-
-        // Call the method to append data
-        appendRowToCSV(filePath, newRow);
-        
-    }
 }
+
+
+
+
+
 
