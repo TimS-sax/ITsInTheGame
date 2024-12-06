@@ -40,6 +40,11 @@ public class BasicGame implements GameLoop {
             "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
     };
 
+    String[] fileNamen = {
+            "dieren", "beroepen", "etenendrinken", "feestdagen",
+            "kleuren", "landen", "plantenenbloemen", "sporten", "transportmiddelen"
+    };
+
     public static void main(String[] args) {
         SaxionApp.startGameLoop(new BasicGame(), 1280, 775, 40);
     }
