@@ -6,7 +6,6 @@ import nl.saxion.app.interaction.KeyboardEvent;
 import nl.saxion.app.interaction.MouseEvent;
 
 import java.awt.*;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -35,14 +34,15 @@ public class BasicGame implements GameLoop {
 
     };
 
-    String[] themas = {
+    public static String[] themas = {
             "Dieren", "Beroepen", "Eten en Drinken", "Feestdagen",
             "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
     };
 
-    String[] fileNamen = {
+    public static String[] fileNamen = {
             "dieren", "beroepen", "etenendrinken", "feestdagen",
             "kleuren", "landen", "plantenenbloemen", "sporten", "transportmiddelen"
+
     };
 
     public static void main(String[] args) {
@@ -70,7 +70,6 @@ public class BasicGame implements GameLoop {
     public void init() {
         SaxionApp.playSound("BasicGame/resources/background music.wav");
         maakStartMenu();
-        reader();
     }
 
     @Override
@@ -161,9 +160,36 @@ public class BasicGame implements GameLoop {
 
     // reader
     public static ArrayList woordenlijst = new ArrayList();
-
+    public static String gekozenThema;
+    public static String themaUitDeLijst;
     public void reader () {
-        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
+        if (themas.equals("Beroepen")) {
+            themaUitDeLijst = "beroepen";
+        }
+        else if (themas.equals("Dieren")) {
+            themaUitDeLijst = "dieren";
+        }
+        else if (themas.equals("Eten en Drinken")) {
+            themaUitDeLijst = "etenendrinken";
+        }
+        else if (themas.equals("Feetstdagen")) {
+            themaUitDeLijst = "feestdagen";
+        }
+        else if (themas.equals("Kleur")) {
+            themaUitDeLijst = "kleur";
+        } else if (themas.equals("Landen")) {
+            themaUitDeLijst = "landen";
+        }
+        else if (themas.equals("Planten en Bloemen")) {
+            themaUitDeLijst = "plantenenbloemen";
+        } else if (themas.equals("Sporten")) {
+            themaUitDeLijst = "sporten";
+        } else if (themas.equals("Transportmiddelen")) {
+            themaUitDeLijst = "transportmiddelen";
+        }
+
+        String gekozenThema = "BasicGame/resources/" +themaUitDeLijst+ ".csv";
+        CsvReader reader = new CsvReader(gekozenThema);
 
         while (reader.loadRow()) {
             String woord = reader.getString(0);
