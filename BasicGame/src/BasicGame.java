@@ -45,7 +45,7 @@ public class BasicGame implements GameLoop {
         for (int i = 0; i <= fouten; i++) {
             //run hier de stappen voor het tekenen van de galg, i is welke stap je moet
             if (Objects.equals(galgstappen[i], "circle")) {
-                SaxionApp.drawCircle(325,140,5);
+                SaxionApp.drawCircle(325, 140, 5);
             } else {
                 String[] coordinates = galgstappen[i].split(",");
                 int x1 = Integer.parseInt(coordinates[0]);
@@ -153,7 +153,7 @@ public class BasicGame implements GameLoop {
     // reader
     public static ArrayList woordenlijst = new ArrayList();
 
-    public void reader () {
+    public void reader() {
         CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
 
         while (reader.loadRow()) {
@@ -183,100 +183,119 @@ public class BasicGame implements GameLoop {
         }
     }
 
-        public void goedoffout () {
-            SaxionApp.pause();
-            SaxionApp.clear();
-            SaxionApp.printLine("Het woord bevat " + aantalletters + " letters");
-            SaxionApp.print("Gok een letter: ");
-            char gok = SaxionApp.readChar();
-            SaxionApp.print(gok);
-            int fout = 0;
-            boolean loop = true;
+    public void goedoffout() {
+        SaxionApp.pause();
+        SaxionApp.clear();
+        SaxionApp.printLine("Het woord bevat " + aantalletters + " letters");
+        SaxionApp.print("Gok een letter: ");
+        char gok = SaxionApp.readChar();
+        SaxionApp.print(gok);
+        int fout = 0;
+        boolean loop = true;
 
-            while (loop) {
-                if (naam.contains(gok)) {
-                    int countCorrect = 0;
+        while (loop) {
+            if (naam.contains(gok)) {
+                int countCorrect = 0;
 
-                    for (int i = 0; i < naam.size(); i++) {
-                        if (naam.get(i) == gok && !user.contains(gok)) {
-                            user.add(gok);
-                            goed++;
-                            countCorrect++;
-                        }
+                for (int i = 0; i < naam.size(); i++) {
+                    if (naam.get(i) == gok && !user.contains(gok)) {
+                        user.add(gok);
+                        goed++;
+                        countCorrect++;
                     }
+                }
 
-                    if (countCorrect > 0) {
-                        SaxionApp.printLine();
-                        SaxionApp.printLine("De gok was goed!", Color.green);
-                        SaxionApp.print("Dit zijn je verkeerd gegokte letters: ");
-                        SaxionApp.print(verkeerd);
-                        SaxionApp.printLine();
-                    }
-
-                    if (goed == aantalletters) {
-                        SaxionApp.printLine("Je hebt het woord goed gegokt!", Color.cyan);
-                        SaxionApp.printLine("Het woord was: " + naam);
-                        loop = false;
-                    } else {
-                        SaxionApp.print("Doe nog een gok: ");
-                        gok = SaxionApp.readChar();
-                        SaxionApp.print(gok);
-                    }
-                } else if (!naam.contains(gok)) {
+                if (countCorrect > 0) {
                     SaxionApp.printLine();
-                    SaxionApp.printLine("De gok was fout!", Color.red);
-                    if (!verkeerd.contains(gok)) {
-                        verkeerd.add(gok);
-                        fout++;
-                    }
+                    SaxionApp.printLine("De gok was goed!", Color.green);
+                    SaxionApp.print("Dit zijn je verkeerd gegokte letters: ");
+                    SaxionApp.print(verkeerd);
+                    SaxionApp.printLine();
+                }
 
-                    if (fout < 13) {
-                        SaxionApp.printLine("Je hebt nu " + fout + " fouten", Color.red);
-                        SaxionApp.print("Dit zijn je gegokte verkeerde letters: ");
-                        SaxionApp.print(verkeerd);
-                        SaxionApp.printLine();
-                        SaxionApp.print("Doe nog een gok: ");
-                        gok = SaxionApp.readChar();
-                        SaxionApp.print(gok);
-                    } else {
-                        SaxionApp.printLine("Je bent af!", Color.red);
-                        loop = false;
-                    }
+                if (goed == aantalletters) {
+                    SaxionApp.printLine("Je hebt het woord goed gegokt!", Color.cyan);
+                    SaxionApp.printLine("Het woord was: " + naam);
+                    loop = false;
                 } else {
-                    SaxionApp.printLine("Je hebt deze letter al correct gegokt!", Color.yellow);
-                    SaxionApp.print("Doe een nieuwe gok: ");
+                    SaxionApp.print("Doe nog een gok: ");
                     gok = SaxionApp.readChar();
                     SaxionApp.print(gok);
                 }
+            } else if (!naam.contains(gok)) {
+                SaxionApp.printLine();
+                SaxionApp.printLine("De gok was fout!", Color.red);
+                if (!verkeerd.contains(gok)) {
+                    verkeerd.add(gok);
+                    fout++;
+                }
+
+                if (fout < 13) {
+                    SaxionApp.printLine("Je hebt nu " + fout + " fouten", Color.red);
+                    SaxionApp.print("Dit zijn je gegokte verkeerde letters: ");
+                    SaxionApp.print(verkeerd);
+                    SaxionApp.printLine();
+                    SaxionApp.print("Doe nog een gok: ");
+                    gok = SaxionApp.readChar();
+                    SaxionApp.print(gok);
+                } else {
+                    SaxionApp.printLine("Je bent af!", Color.red);
+                    loop = false;
+                }
+            } else {
+                SaxionApp.printLine("Je hebt deze letter al correct gegokt!", Color.yellow);
+                SaxionApp.print("Doe een nieuwe gok: ");
+                gok = SaxionApp.readChar();
+                SaxionApp.print(gok);
             }
         }
+    }
+
+
 
     int punten = 13;
-    public void score(int gameStatus) {
-        if (gameStatus == 0) { // player wint
 
-            int rondescore = punten - fouten;
+    public void score(int gameStatus) {
+
+
+        int rondescore = punten - fouten;
+        SaxionApp.drawText(String.valueOf(rondescore), 1070, 715, 5);
+
+
+        if (gameStatus == 0) { // player wint
 
             // stuur score naar csv
             CsvtoevoegenTemp.csvopslaanT(rondescore);
 
+
             System.out.println("Score gestuurd naar Highscore.csv!");
-        } else if (gameStatus == 1) { // Player loses
+        } else if (gameStatus == 1) { // Player verliest
+
+
+
             //lees uit temp csv and alles optellen
 
 
-
             //haal sum van scores in score temp file + rondescore
-            int currentScore = punten - fouten;
 
-            // totaale score
-            System.out.println("Total Score: " + currentScore);
 
-            // high score sturen naar csv
-            CsvtoevoegenHighscore.csvopslaanH(currentScore);
+            System.out.println("Total Score: " + rondescore);
+
+
+            CsvtoevoegenHighscore.csvopslaanH(rondescore);
             // tempscore.csv legen
         }
     }
+
+
+    //highscore laten zien
+//    public void Highscore{
+//
+//        //csvreader high score
+//
+//
+//
+//    }
 
 
 }
