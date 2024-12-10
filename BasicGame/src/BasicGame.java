@@ -12,7 +12,7 @@ import java.util.Objects;
 public class BasicGame implements GameLoop {
     private boolean laatThemaSchermZien = false;
     int fouten = 0;
-
+    public static String currentThema = "";
     String[] galgstappen = {
             "250,200,300,200", // "_"
             "250,200,275,175", // "/"
@@ -34,6 +34,11 @@ public class BasicGame implements GameLoop {
     String[] themas = {
             "Dieren", "Beroepen", "Eten en Drinken", "Feestdagen",
             "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
+    };
+
+    String[] thematranslate = {
+            "Dieren", "Beroepen", "Etenendrinken", "Feestdagen", "Kleuren", "Landen", "Plantenenbloemen",
+            "Sporten", "Transportmiddelen"
     };
 
     public static void main(String[] args) {
@@ -61,7 +66,6 @@ public class BasicGame implements GameLoop {
     public void init() {
         SaxionApp.playSound("BasicGame/resources/background music.wav");
         maakStartMenu();
-        reader();
     }
 
     @Override
@@ -75,7 +79,6 @@ public class BasicGame implements GameLoop {
     public void keyboardEvent(KeyboardEvent keyboardEvent) {
 
     }
-
     @Override
     public void mouseEvent(MouseEvent mouseEvent) {
         if (mouseEvent.isMouseDown() && mouseEvent.isLeftMouseButton()) {
@@ -93,11 +96,14 @@ public class BasicGame implements GameLoop {
                 }
             } else {
                 // Kijkt welke knop er is gekozen.
-                for (int i = 0; i < themas.length; i++) {
+                for (int i = 0; i < thematranslate.length; i++) {
                     int x = 200 + (i % 3) * 300;
                     int y = 150 + (i / 3) * 100;
                     if (isInsideRectangle(mouseX, mouseY, x + 30, y + 200, 200, 60)) {
-                        System.out.println("Thema geselecteerd: " + themas[i]);
+                        String gekozenThema = thematranslate[i];
+                        System.out.println("Thema geselecteerd: " + thematranslate[i]);
+                        currentThema = thematranslate[i];
+                        reader();
                     }
                 }
             }
@@ -154,8 +160,9 @@ public class BasicGame implements GameLoop {
     public static ArrayList woordenlijst = new ArrayList();
 
     public void reader() {
-        CsvReader reader = new CsvReader("BasicGame/resources/beroepen.csv");
+        CsvReader reader = new CsvReader("BasicGame/resources/" + currentThema + ".csv");
 
+        woordenlijst.clear();
         while (reader.loadRow()) {
             String woord = reader.getString(0);
             woordenlijst.add(woord);
