@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class BasicGame implements GameLoop {
     private boolean laatThemaSchermZien = false;
+    private boolean laatSpelSchermZien = false;
     int fouten = 0;
     public static String currentThema = "";
     String[] galgstappen = {
@@ -35,7 +36,6 @@ public class BasicGame implements GameLoop {
             "Dieren", "Beroepen", "Eten en Drinken", "Feestdagen",
             "Kleuren", "Landen", "Planten en Bloemen", "Sporten", "Transportmiddelen"
     };
-
     String[] thematranslate = {
             "Dieren", "Beroepen", "Etenendrinken", "Feestdagen", "Kleuren", "Landen", "Plantenenbloemen",
             "Sporten", "Transportmiddelen"
@@ -44,7 +44,6 @@ public class BasicGame implements GameLoop {
     public static void main(String[] args) {
         SaxionApp.startGameLoop(new BasicGame(), 1280, 775, 40);
     }
-
 
     public void galgUI() {
         for (int i = 0; i <= fouten; i++) {
@@ -72,6 +71,8 @@ public class BasicGame implements GameLoop {
     public void loop() {
         if (laatThemaSchermZien) {
             maakThemaScherm();
+        } else if (laatSpelSchermZien) {
+            maakSpelScherm();
         }
     }
 
@@ -85,7 +86,7 @@ public class BasicGame implements GameLoop {
             int mouseX = mouseEvent.getX();
             int mouseY = mouseEvent.getY();
 
-            if (!laatThemaSchermZien) {
+            if (!laatThemaSchermZien && !laatSpelSchermZien) {
                 // Kijkt of de knop voor het thema scherm is aangeklikt
                 if (isInsideRectangle(mouseX, mouseY, 390, 400, 200, 60)) {
                     laatThemaSchermZien = true;
@@ -94,7 +95,7 @@ public class BasicGame implements GameLoop {
                 if (isInsideRectangle(mouseX, mouseY, 690, 400, 200, 60)) {
                     SaxionApp.quit();
                 }
-            } else {
+            } else if (laatThemaSchermZien) {
                 // Kijkt welke knop er is gekozen.
                 for (int i = 0; i < thematranslate.length; i++) {
                     int x = 200 + (i % 3) * 300;
@@ -104,10 +105,33 @@ public class BasicGame implements GameLoop {
                         System.out.println("Thema geselecteerd: " + thematranslate[i]);
                         currentThema = thematranslate[i];
                         reader();
+                        laatThemaSchermZien = false;
+                        laatSpelSchermZien = true;
                     }
+                }
+            } else if (laatSpelSchermZien) {
+                if (isInsideRectangle(mouseX, mouseY, 1000, 680, 200, 60)) {
+                    laatSpelSchermZien = false;
+                    maakStartMenu();
                 }
             }
         }
+    }
+
+    private void maakSpelScherm() {
+        SaxionApp.clear();
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
+
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderColor(Color.white);
+        SaxionApp.setBorderSize(5);
+
+        SaxionApp.drawText("Thema: " + currentThema, 50, 50, 30);
+        SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
+
+        galgUI();
+
+        maakKnop(1000, 680, 200, 60, "Terug naar Menu");
     }
 
     // Begin scherm na het runnen van de applicatie
