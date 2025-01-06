@@ -20,7 +20,7 @@ public class BasicGame implements GameLoop {
     private int fouten = 0;
     public static String huidigThema = "";
     private ArrayList<String> toetsaanslagen = new ArrayList<>();
-    private boolean volgToetsaanslagen = true;
+    private boolean volgToetsaanslagen = false;
 
     private String[] galgStappen = {
             "250,200,300,200", // "_"
@@ -88,7 +88,9 @@ public class BasicGame implements GameLoop {
     public void keyboardEvent(KeyboardEvent toetsEvent) {
         if (volgToetsaanslagen && toetsEvent.isKeyPressed()) {
             String letter = toetsCodeNaarLetter(toetsEvent.getKeyCode());
+
             toetsaanslagen.add(letter);
+            System.out.println(toetsaanslagen);
         }
     }
 
@@ -152,6 +154,7 @@ public class BasicGame implements GameLoop {
     }
 
     private void maakSpelScherm() {
+        volgToetsaanslagen = true;
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
         SaxionApp.drawText("Thema: " + huidigThema, 50, 50, 30);
@@ -187,6 +190,20 @@ public class BasicGame implements GameLoop {
     // ================================================
     // Hulpmethoden
     // ================================================
+
+    private boolean checkGoedOfFout(char gok, String woord) {
+        String[] gesplitswoord = woord.split("");
+        return IsCharInStringArray(gok, gesplitswoord);
+    }
+
+    private boolean IsCharInStringArray(char character, String[] array) {
+        for (String string : array) {
+            if (string.equals(String.valueOf(character))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean isBinnenRechthoek(int muisX, int muisY, int rechthoekX, int rechthoekY, int breedte, int hoogte) {
         return muisX >= rechthoekX && muisX <= rechthoekX + breedte && muisY >= rechthoekY && muisY <= rechthoekY + hoogte;
