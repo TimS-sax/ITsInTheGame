@@ -156,6 +156,7 @@ public class BasicGame implements GameLoop {
 
     private void maakSpelScherm() {
         volgToetsaanslagen = true;
+        String willekeurigWoord = randomWoord();
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
         SaxionApp.setBorderColor(Color.white);
@@ -221,5 +222,11 @@ public class BasicGame implements GameLoop {
             String woord = lezer.getString(0);
             woordenLijst.add(woord);
         }
+        System.out.println(randomWoord());
+    }
+
+    private String randomWoord() {
+        int randomNummer = (int) (Math.random() * BasicGame.woordenLijst.size());
+        return BasicGame.woordenLijst.get(randomNummer);
     }
 }
