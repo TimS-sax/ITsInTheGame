@@ -93,7 +93,8 @@ public class BasicGame implements GameLoop {
     public void keyboardEvent(KeyboardEvent toetsEvent) {
         if (volgToetsaanslagen && toetsEvent.isKeyPressed()) {
             String letter = toetsCodeNaarLetter(toetsEvent.getKeyCode());
-
+            char character = letter.charAt(0);
+            checkGoedOfFout(character,willekeurigWoordArray);
             toetsaanslagen.add(letter);
             System.out.println(toetsaanslagen);
         }
