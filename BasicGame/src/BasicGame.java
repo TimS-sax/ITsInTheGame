@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class BasicGame implements GameLoop {
@@ -22,6 +23,9 @@ public class BasicGame implements GameLoop {
     public static String huidigThema = "";
     private ArrayList<String> toetsaanslagen = new ArrayList<>();
     private boolean volgToetsaanslagen = false;
+    private boolean genereerWoord = true;
+    private String randomWoord = "";
+    private String[] willekeurigWoordArray = {};
 
     private String[] galgStappen = {
             "250,200,300,200", // "_"
@@ -156,12 +160,18 @@ public class BasicGame implements GameLoop {
 
     private void maakSpelScherm() {
         volgToetsaanslagen = true;
-        String willekeurigWoord = randomWoord();
+        if (genereerWoord) {
+            willekeurigWoordArray = randomWoord();
+            System.out.println(Arrays.toString(willekeurigWoordArray));
+            System.out.println(willekeurigWoordArray.length);
+            genereerWoord = false;
+        }
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
         SaxionApp.setBorderColor(Color.white);
         SaxionApp.drawText("Thema: " + huidigThema, 50, 50, 30);
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
+        SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
         tekenGalg();
         maakKnop(1000, 680, 200, 60, "Terug naar Menu");
     }
@@ -194,9 +204,8 @@ public class BasicGame implements GameLoop {
     // Hulpmethoden
     // ================================================
 
-    private boolean checkGoedOfFout(char gok, String woord) {
-        String[] gesplitswoord = woord.split("");
-        return IsCharInStringArray(gok, gesplitswoord);
+    private boolean checkGoedOfFout(char gok, String[] woord) {
+        return IsCharInStringArray(gok, woord);
     }
 
     private boolean IsCharInStringArray(char character, String[] array) {
@@ -222,11 +231,12 @@ public class BasicGame implements GameLoop {
             String woord = lezer.getString(0);
             woordenLijst.add(woord);
         }
-        System.out.println(randomWoord());
     }
 
-    private String randomWoord() {
+    private String[] randomWoord() {
         int randomNummer = (int) (Math.random() * BasicGame.woordenLijst.size());
-        return BasicGame.woordenLijst.get(randomNummer);
+        randomWoord = BasicGame.woordenLijst.get(randomNummer);
+        System.out.println("Woord geselecteerd: " + randomWoord);
+        return randomWoord.split("");
     }
 }
