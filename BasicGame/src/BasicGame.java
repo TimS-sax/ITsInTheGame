@@ -6,6 +6,8 @@ import nl.saxion.app.interaction.MouseEvent;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,7 +27,8 @@ public class BasicGame implements GameLoop {
     private boolean genereerWoord = true;
     private String randomWoord = "";
     private String[] willekeurigWoordArray = {};
-
+    private int einde = 0;
+    private int eind = 0;
     private String[] galgStappen = {
             "250,200,300,200", // "_"
             "250,200,275,175", // "/"
@@ -236,5 +239,40 @@ public class BasicGame implements GameLoop {
         randomWoord = BasicGame.woordenLijst.get(randomNummer);
         System.out.println("Woord geselecteerd: " + randomWoord);
         return randomWoord.split("");
+    }
+
+    //csvreader voor tempscore
+    private void Tempcsvlezen(String data) {
+        CsvReader tdatalezen = new CsvReader("Basicgame/resources/tempscore.csv");
+
+        while (tdatalezen.loadRow()) {
+            int waarde = tdatalezen.getInt(0);
+            int eindscore = eind + waarde;
+        }
+    }
+
+    //score uitrekenen & onthouden
+    private void score(int gamestatus) { // eind scherm rekenen stuff
+        int rondescore = 13 - fouten;
+
+        if (gamestatus == 0) { //speler wint
+            CsvtoevoegenTemp.csvopslaanT(rondescore);
+
+        } else if (gamestatus == 1) {//speler verliest
+//            Tempcsvlezen();
+            int eindescore = eind + rondescore; //!!
+            CsvtoevoegenHighscore.csvopslaanH(eindescore);
+            clearCSV("Basicgame/resources/tempscore.csv");
+        }
+    }
+
+
+//csv file legen
+    private void clearCSV(String filePath) {
+        try (FileWriter fileWriter = new FileWriter(filePath, false)) {
+            fileWriter.write("");
+        } catch (IOException e) {
+            System.out.println("An error occurred while clearing the file: " + e.getMessage());
+        }
     }
 }
