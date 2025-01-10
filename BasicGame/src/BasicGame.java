@@ -4,6 +4,7 @@ import nl.saxion.app.interaction.GameLoop;
 import nl.saxion.app.interaction.KeyboardEvent;
 import nl.saxion.app.interaction.MouseEvent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileWriter;
@@ -95,7 +96,8 @@ public class BasicGame implements GameLoop {
     public void keyboardEvent(KeyboardEvent toetsEvent) {
         if (volgToetsaanslagen && toetsEvent.isKeyPressed()) {
             String letter = toetsCodeNaarLetter(toetsEvent.getKeyCode());
-
+            char character = letter.charAt(0);
+            checkGoedOfFout(character,willekeurigWoordArray);
             toetsaanslagen.add(letter);
             System.out.println(toetsaanslagen);
         }
@@ -170,6 +172,7 @@ public class BasicGame implements GameLoop {
         }
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
+        SaxionApp.setBorderColor(Color.white);
         SaxionApp.drawText("Thema: " + huidigThema, 50, 50, 30);
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
         SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
