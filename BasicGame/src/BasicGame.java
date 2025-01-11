@@ -130,8 +130,7 @@ public class BasicGame implements GameLoop {
                 }
             } else if (toonSpelScherm) {
                 if (isBinnenRechthoek(muisX, muisY, 1000, 680, 200, 60)) {
-                    toonSpelScherm = false;
-                    maakStartMenu();
+                    SaxionApp.quit();
                 }
             }
         }
@@ -177,7 +176,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
         SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
         tekenGalg();
-        maakKnop(1000, 680, 200, 60, "Terug naar Menu");
+        maakKnop(1000, 680, 200, 60, "Stop Spel");
     }
 
     private void maakKnop(int x, int y, int breedte, int hoogte, String tekst) {
