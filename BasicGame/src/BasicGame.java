@@ -4,7 +4,6 @@ import nl.saxion.app.interaction.GameLoop;
 import nl.saxion.app.interaction.KeyboardEvent;
 import nl.saxion.app.interaction.MouseEvent;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileWriter;
@@ -19,8 +18,11 @@ public class BasicGame implements GameLoop {
     // Velden en Constanten
     // ================================================
 
-    private boolean toonThemaScherm = false;
-    private boolean toonSpelScherm = false;
+    private char character;
+
+    ArrayList<String> hashedWoord = new ArrayList<>();
+
+    private String huidigScherm = "start"; // Possible values: "start", "thema", "spel"
     private int fouten = 0;
     public static String huidigThema = "";
     private ArrayList<String> toetsaanslagen = new ArrayList<>();
@@ -31,19 +33,19 @@ public class BasicGame implements GameLoop {
     private int einde = 0;
     private int eind = 0;
     private String[] galgStappen = {
-            "250,200,300,200", // "_"
-            "250,200,275,175", // "/"
-            "300,200,275,175", // "\"
-            "275,175,275,125", // "|"
-            "275,125,325,125", // "-"
-            "275,135,285,125", // "/"
-            "325,125,325,140", // "|"
-            "circle",          // "325,145,5"
-            "325,150,325,160", // "|"
-            "325,155,315,145", // "\"
-            "325,155,335,145", // "/"
-            "325,160,315,165", // "/"
-            "325,160,335,165"  // "\"
+            "375,600,450,600", // "_"
+            "375,600,412,562", // "/"
+            "450,600,412,562", // "\"
+            "412,562,412,487", // "|"
+            "412,487,487,487", // "-"
+            "412,502,427,487", // "/"
+            "487,487,487,510", // "|"
+            "circle",          // "487,517,7.5"
+            "487,525,487,540", // "|"
+            "487,532,472,517", // "\"
+            "487,532,502,517", // "/"
+            "487,540,472,547", // "/"
+            "487,540,502,547"  // "\"
     };
 
     private String[] themas = {
@@ -60,6 +62,7 @@ public class BasicGame implements GameLoop {
     private static final ArrayList<Character> naam = new ArrayList<>();
     private static final ArrayList<Character> gebruikerGok = new ArrayList<>();
     private static final ArrayList<Character> verkeerdeGok = new ArrayList<>();
+    private static final ArrayList<String> onthultWoord = new ArrayList<>();
 
     private static int juisteGokken = 0;
     private static int aantalLetters;
@@ -85,10 +88,24 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void loop() {
-        if (toonThemaScherm) {
-            maakThemaScherm();
-        } else if (toonSpelScherm) {
-            maakSpelScherm();
+        switch (huidigScherm) {
+            case "start":
+                maakStartMenu();
+                break;
+            case "thema":
+                maakThemaScherm();
+                break;
+            case "spel":
+                maakSpelScherm();
+                break;
+            case "eind":
+                if (fouten == 12) {
+                    boolean wincon = false;
+                    maakEindScherm(wincon);
+                }
+            default:
+                System.out.println("Onbekend scherm: " + huidigScherm);
+                break;
         }
     }
 
@@ -96,10 +113,19 @@ public class BasicGame implements GameLoop {
     public void keyboardEvent(KeyboardEvent toetsEvent) {
         if (volgToetsaanslagen && toetsEvent.isKeyPressed()) {
             String letter = toetsCodeNaarLetter(toetsEvent.getKeyCode());
-            char character = letter.charAt(0);
+            character = letter.charAt(0);
             checkGoedOfFout(character,willekeurigWoordArray);
-            toetsaanslagen.add(letter);
+            toetsaanslagen.add(letter.toLowerCase());
             System.out.println(toetsaanslagen);
+            if(checkGoedOfFout(character,willekeurigWoordArray)) {
+                hashWoord(willekeurigWoordArray,character);
+            } else if (!checkGoedOfFout(character,willekeurigWoordArray)) {
+                tekenGalg();
+                fouten++;
+            }
+            if(fouten == 12) {
+                huidigScherm = "eind";
+            }
         }
     }
 
@@ -109,36 +135,68 @@ public class BasicGame implements GameLoop {
             int muisX = muisEvent.getX();
             int muisY = muisEvent.getY();
 
-            if (!toonThemaScherm && !toonSpelScherm) {
-                if (isBinnenRechthoek(muisX, muisY, 390, 400, 200, 60)) {
-                    toonThemaScherm = true;
-                } else if (isBinnenRechthoek(muisX, muisY, 690, 400, 200, 60)) {
-                    SaxionApp.quit();
-                }
-            } else if (toonThemaScherm) {
-                for (int i = 0; i < themaVertaling.length; i++) {
-                    int x = 200 + (i % 3) * 300;
-                    int y = 150 + (i / 3) * 100;
-                    if (isBinnenRechthoek(muisX, muisY, x + 30, y + 200, 200, 60)) {
-                        huidigThema = themaVertaling[i];
-                        System.out.println("Thema geselecteerd: " + huidigThema);
-                        woordenLijst.clear();
-                        laadWoorden(huidigThema);
-                        toonThemaScherm = false;
-                        toonSpelScherm = true;
-                    }
-                }
-            } else if (toonSpelScherm) {
-                if (isBinnenRechthoek(muisX, muisY, 1000, 680, 200, 60)) {
-                    SaxionApp.quit();
-                }
+            switch (huidigScherm) {
+                case "start":
+                    handleStartMenuMouse(muisX, muisY);
+                    break;
+                case "thema":
+                    handleThemaSchermMouse(muisX, muisY);
+                    break;
+                case "spel":
+                    handleSpelSchermMouse(muisX, muisY);
+                    break;
+                default:
+                    System.out.println("Onbekende mouseEvent op scherm: " + huidigScherm);
+                    break;
             }
         }
     }
 
+    private void handleStartMenuMouse(int muisX, int muisY) {
+        if (isBinnenRechthoek(muisX, muisY, 390, 400, 200, 60)) {
+            huidigScherm = "thema"; // Switch to theme screen
+        } else if (isBinnenRechthoek(muisX, muisY, 690, 400, 200, 60)) {
+            SaxionApp.quit(); // Quit the game
+        }
+    }
+
+    private void handleThemaSchermMouse(int muisX, int muisY) {
+        for (int i = 0; i < themaVertaling.length; i++) {
+            int x = 200 + (i % 3) * 300;
+            int y = 150 + (i / 3) * 100;
+            if (isBinnenRechthoek(muisX, muisY, x + 30, y + 200, 200, 60)) {
+                huidigThema = themaVertaling[i];
+                System.out.println("Thema geselecteerd: " + huidigThema);
+                woordenLijst.clear();
+                laadWoorden(huidigThema);
+                huidigScherm = "spel"; // Switch to gameplay screen
+            }
+        }
+    }
+
+    private void handleSpelSchermMouse(int muisX, int muisY) {
+        if (isBinnenRechthoek(muisX, muisY, 1000, 680, 200, 60)) {
+            SaxionApp.quit(); // Quit the game
+        }
+    }
+
+
     // ================================================
     // UI Methoden
     // ================================================
+
+    private void maakEindScherm(boolean wincon) {
+        SaxionApp.clear();
+        SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
+        SaxionApp.setFill(Color.white);
+        SaxionApp.setBorderColor(Color.black);
+        SaxionApp.setBorderSize(5);
+        if(!wincon) {
+            SaxionApp.drawBorderedText("Je hebt verloren!", 150,150,100);
+        } else if (wincon) {
+            SaxionApp.drawBorderedText("Gewonnen, geweldig!", 150,150, 100);
+        }
+    }
 
     private void maakStartMenu() {
         SaxionApp.clear();
@@ -165,9 +223,11 @@ public class BasicGame implements GameLoop {
         volgToetsaanslagen = true;
         if (genereerWoord) {
             willekeurigWoordArray = randomWoord();
+            hashedWoord = hashWoord(willekeurigWoordArray,character);
             System.out.println(Arrays.toString(willekeurigWoordArray));
             System.out.println(willekeurigWoordArray.length);
             genereerWoord = false;
+
         }
         SaxionApp.clear();
         SaxionApp.drawImage("BasicGame/resources/background.jpg", 0, 0, 1280, 775);
@@ -175,6 +235,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText("Thema: " + huidigThema, 50, 50, 30);
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
         SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
+        SaxionApp.drawText(String.valueOf(hashedWoord),600,50,30);
         tekenGalg();
         maakKnop(1000, 680, 200, 60, "Stop Spel");
     }
@@ -191,7 +252,7 @@ public class BasicGame implements GameLoop {
     private void tekenGalg() {
         for (int i = 0; i <= fouten; i++) {
             if (Objects.equals(galgStappen[i], "circle")) {
-                SaxionApp.drawCircle(325, 140, 5);
+                SaxionApp.drawCircle(487, 517, 7); // Scaled center and radius
             } else {
                 String[] coördinaten = galgStappen[i].split(",");
                 int x1 = Integer.parseInt(coördinaten[0]);
@@ -225,7 +286,7 @@ public class BasicGame implements GameLoop {
     }
 
     private String toetsCodeNaarLetter(int toetsCode) {
-        return KeyEvent.getKeyText(toetsCode);
+        return KeyEvent.getKeyText(toetsCode).toLowerCase();
     }
 
     private void laadWoorden(String thema) {
@@ -268,6 +329,31 @@ public class BasicGame implements GameLoop {
         }
     }
 
+    private ArrayList<String> hashWoord(String[] woord, char character) {
+        // Initialize hashedWoord only if it's empty
+        if (hashedWoord.isEmpty()) {
+            for (int i = 0; i < woord.length; i++) {
+                hashedWoord.add("-");
+            }
+        }
+
+        // Update only the positions where the guessed character matches
+        for (int i = 0; i < woord.length; i++) {
+            if (woord[i].equals(String.valueOf(character))) {
+                hashedWoord.set(i, String.valueOf(character));
+            }
+        }
+
+        // Check if the entire word is revealed
+        if (!hashedWoord.contains("-")) {
+            boolean wincon = true; // Set win condition to true
+            huidigScherm = "eind";
+            maakEindScherm(wincon);
+        }
+
+        System.out.print(hashedWoord);
+        return hashedWoord;
+    }
 
 //csv file legen
     private void clearCSV(String filePath) {
