@@ -242,6 +242,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
         SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
         SaxionApp.drawText(String.valueOf(hashedWoord),600,50,30);
+        SaxionApp.drawText("Score: " + (beginScore - fouten), 50, 700, 30) ;
         tekenGalg();
         maakKnop(1000, 680, 200, 60, "Stop Spel");
     }
