@@ -29,9 +29,9 @@ public class BasicGame implements GameLoop {
     private boolean volgToetsaanslagen = false;
     private boolean genereerWoord = true;
     private String randomWoord = "";
+    private int beginScore = 13;
+    private int hoogsteScore = highScoreLezen();
     private String[] willekeurigWoordArray = {};
-    private int einde = 0;
-    private int eind = 0;
     private String[] galgStappen = {
             "375,600,450,600", // "_"
             "375,600,412,562", // "/"
@@ -66,7 +66,6 @@ public class BasicGame implements GameLoop {
 
     private static int juisteGokken = 0;
     private static int aantalLetters;
-    private int punten = 13;
 
     // ================================================
     // Hoofd Methode
@@ -100,8 +99,12 @@ public class BasicGame implements GameLoop {
                 break;
             case "eind":
                 if (fouten == 12) {
+                    System.out.println("Huidige waarde van fouten: " + fouten);
                     boolean wincon = false;
                     maakEindScherm(wincon);
+                    score();
+                } else if (fouten <= 12){
+                    score();
                 }
             default:
                 System.out.println("Onbekend scherm: " + huidigScherm);
@@ -193,8 +196,11 @@ public class BasicGame implements GameLoop {
         SaxionApp.setBorderSize(5);
         if(!wincon) {
             SaxionApp.drawBorderedText("Je hebt verloren!", 150,150,100);
+            SaxionApp.drawBorderedText("Je score was : " + (beginScore-fouten) , 150, 250, 100 );
+            SaxionApp.drawBorderedText("De highscore is: " + (hoogsteScore),150, 350, 100 );
         } else if (wincon) {
             SaxionApp.drawBorderedText("Gewonnen, geweldig!", 150,150, 100);
+            SaxionApp.drawBorderedText("Je score was : " + (beginScore-fouten) , 150, 250, 100 );
         }
     }
 
@@ -304,29 +310,34 @@ public class BasicGame implements GameLoop {
         return randomWoord.split("");
     }
 
-    //csvreader voor tempscore
-    private void Tempcsvlezen(String data) {
-        CsvReader tdatalezen = new CsvReader("Basicgame/resources/tempscore.csv");
+    private int highScoreLezen() {
+        CsvReader highscoreDataLezen = new CsvReader("BasicGame/resources/Highscore.csv");
 
-        while (tdatalezen.loadRow()) {
-            int waarde = tdatalezen.getInt(0);
-            int eindscore = eind + waarde;
+        int hoogsteScore = Integer.MIN_VALUE;  // Begin met het laagste mogelijke integer
+
+        while (highscoreDataLezen.loadRow()) {
+            // Veronderstel dat de score zich in de eerste kolom bevindt
+            String scoreString = highscoreDataLezen.getString(0);
+
+            try {
+                int score = Integer.parseInt(scoreString);  // Zet de score om naar een int
+                if (score > hoogsteScore) {
+                    hoogsteScore = score;  // Werk de hoogste score bij
+                }
+            } catch (NumberFormatException e) {
+                // Als er een fout is bij het omzetten naar een getal, negeer de waarde
+                System.out.println("Ongeldige score gevonden: " + scoreString);
+            }
         }
+        return hoogsteScore;  // Retourneer de hoogste score
     }
 
-    //score uitrekenen & onthouden
-    private void score(int gamestatus) { // eind scherm rekenen stuff
-        int rondescore = 13 - fouten;
 
-        if (gamestatus == 0) { //speler wint
-            CsvtoevoegenTemp.csvopslaanT(rondescore);
 
-        } else if (gamestatus == 1) {//speler verliest
-//            Tempcsvlezen();
-            int eindescore = eind + rondescore; //!!
-            CsvtoevoegenHighscore.csvopslaanH(eindescore);
-            clearCSV("Basicgame/resources/tempscore.csv");
-        }
+    //score en toevoegen aan (high)score file
+    private void score() { // eind scherm rekenen stuff
+        int rondescore = beginScore - fouten;
+        CsvtoevoegenHighscore.csvopslaanH(rondescore);
     }
 
     private ArrayList<String> hashWoord(String[] woord, char character) {

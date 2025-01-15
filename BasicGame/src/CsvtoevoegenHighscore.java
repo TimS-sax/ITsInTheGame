@@ -26,6 +26,6 @@ public class CsvtoevoegenHighscore {
 
     // score opslaan naar csv
     public static void csvopslaanH(int score) {
-        appendRowToCSV("Highscore.csv", score);
+        appendRowToCSV("BasicGame/resources/Highscore.csv", score);
     }
 }
