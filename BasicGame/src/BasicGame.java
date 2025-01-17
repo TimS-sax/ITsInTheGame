@@ -33,6 +33,7 @@ public class BasicGame implements GameLoop {
     private int hoogsteScore = highScoreLezen();
     private String[] willekeurigWoordArray = {};
     private String[] galgStappen = {
+            "0,0,0,0", // leeg beginnen
             "375,600,450,600", // "_"
             "375,600,412,562", // "/"
             "450,600,412,562", // "\"
