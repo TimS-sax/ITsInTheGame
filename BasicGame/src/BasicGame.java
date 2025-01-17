@@ -103,7 +103,7 @@ public class BasicGame implements GameLoop {
                     boolean wincon = false;
                     maakEindScherm(wincon);
                     score();
-                } else if (fouten <= 12){
+                } else if (fouten <= 12) {
                     score();
                 }
             default:
@@ -117,16 +117,16 @@ public class BasicGame implements GameLoop {
         if (volgToetsaanslagen && toetsEvent.isKeyPressed()) {
             String letter = toetsCodeNaarLetter(toetsEvent.getKeyCode());
             character = letter.charAt(0);
-            checkGoedOfFout(character,willekeurigWoordArray);
+            checkGoedOfFout(character, willekeurigWoordArray);
             toetsaanslagen.add(letter.toLowerCase());
             System.out.println(toetsaanslagen);
-            if(checkGoedOfFout(character,willekeurigWoordArray)) {
-                hashWoord(willekeurigWoordArray,character);
-            } else if (!checkGoedOfFout(character,willekeurigWoordArray)) {
+            if (checkGoedOfFout(character, willekeurigWoordArray)) {
+                hashWoord(willekeurigWoordArray, character);
+            } else if (!checkGoedOfFout(character, willekeurigWoordArray)) {
                 tekenGalg();
                 fouten++;
             }
-            if(fouten == 12) {
+            if (fouten == 12) {
                 huidigScherm = "eind";
             }
         }
@@ -194,13 +194,13 @@ public class BasicGame implements GameLoop {
         SaxionApp.setFill(Color.white);
         SaxionApp.setBorderColor(Color.black);
         SaxionApp.setBorderSize(5);
-        if(!wincon) {
-            SaxionApp.drawBorderedText("Je hebt verloren!", 150,150,100);
-            SaxionApp.drawBorderedText("Je score was : " + (beginScore-fouten) , 150, 250, 100 );
-            SaxionApp.drawBorderedText("De highscore is: " + (hoogsteScore),150, 350, 100 );
+        if (!wincon) {
+            SaxionApp.drawBorderedText("Je hebt verloren!", 150, 150, 100);
+            SaxionApp.drawBorderedText("Je score was : " + (beginScore - fouten), 150, 250, 100);
+            SaxionApp.drawBorderedText("De highscore is: " + (hoogsteScore), 150, 350, 100);
         } else if (wincon) {
-            SaxionApp.drawBorderedText("Gewonnen, geweldig!", 150,150, 100);
-            SaxionApp.drawBorderedText("Je score was : " + (beginScore-fouten) , 150, 250, 100 );
+            SaxionApp.drawBorderedText("Gewonnen, geweldig!", 150, 150, 100);
+            SaxionApp.drawBorderedText("Je score was : " + (beginScore - fouten), 150, 250, 100);
         }
     }
 
@@ -229,7 +229,7 @@ public class BasicGame implements GameLoop {
         volgToetsaanslagen = true;
         if (genereerWoord) {
             willekeurigWoordArray = randomWoord();
-            hashedWoord = hashWoord(willekeurigWoordArray,character);
+            hashedWoord = hashWoord(willekeurigWoordArray, character);
             System.out.println(Arrays.toString(willekeurigWoordArray));
             System.out.println(willekeurigWoordArray.length);
             genereerWoord = false;
@@ -241,8 +241,8 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText("Thema: " + huidigThema, 50, 50, 30);
         SaxionApp.drawText("Fouten: " + fouten, 50, 100, 30);
         SaxionApp.drawText("Woord Lengte: " + willekeurigWoordArray.length, 50, 150, 30);
-        SaxionApp.drawText(String.valueOf(hashedWoord),600,50,30);
-        SaxionApp.drawText("Score: " + (beginScore - fouten), 50, 700, 30) ;
+        SaxionApp.drawText(String.valueOf(hashedWoord), 600, 50, 30);
+        SaxionApp.drawText("Score: " + (beginScore - fouten), 50, 700, 30);
         tekenGalg();
         maakKnop(1000, 680, 200, 60, "Stop Spel");
     }
@@ -257,6 +257,7 @@ public class BasicGame implements GameLoop {
     }
 
     private void tekenGalg() {
+        SaxionApp.drawRectangle(350, 450, 175, 180);
         for (int i = 0; i <= fouten; i++) {
             if (Objects.equals(galgStappen[i], "circle")) {
                 SaxionApp.drawCircle(487, 517, 7); // Scaled center and radius
@@ -334,7 +335,6 @@ public class BasicGame implements GameLoop {
     }
 
 
-
     //score en toevoegen aan (high)score file
     private void score() { // eind scherm rekenen stuff
         int rondescore = beginScore - fouten;
@@ -367,7 +367,7 @@ public class BasicGame implements GameLoop {
         return hashedWoord;
     }
 
-//csv file legen
+    //csv file legen
     private void clearCSV(String filePath) {
         try (FileWriter fileWriter = new FileWriter(filePath, false)) {
             fileWriter.write("");
