@@ -106,6 +106,7 @@ public class BasicGame implements GameLoop {
                 } else if (fouten <= 12) {
                     score();
                 }
+                SaxionApp.stopLoop();
             default:
                 System.out.println("Onbekend scherm: " + huidigScherm);
                 break;
@@ -318,16 +319,13 @@ public class BasicGame implements GameLoop {
         int hoogsteScore = Integer.MIN_VALUE;  // Begin met het laagste mogelijke integer
 
         while (highscoreDataLezen.loadRow()) {
-            // Veronderstel dat de score zich in de eerste kolom bevindt
             String scoreString = highscoreDataLezen.getString(0);
-
             try {
-                int score = Integer.parseInt(scoreString);  // Zet de score om naar een int
+                int score = Integer.parseInt(scoreString);
                 if (score > hoogsteScore) {
                     hoogsteScore = score;  // Werk de hoogste score bij
                 }
             } catch (NumberFormatException e) {
-                // Als er een fout is bij het omzetten naar een getal, negeer de waarde
                 System.out.println("Ongeldige score gevonden: " + scoreString);
             }
         }
@@ -367,12 +365,5 @@ public class BasicGame implements GameLoop {
         return hashedWoord;
     }
 
-    //csv file legen
-    private void clearCSV(String filePath) {
-        try (FileWriter fileWriter = new FileWriter(filePath, false)) {
-            fileWriter.write("");
-        } catch (IOException e) {
-            System.out.println("An error occurred while clearing the file: " + e.getMessage());
-        }
-    }
+
 }
