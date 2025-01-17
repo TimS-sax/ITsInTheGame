@@ -257,7 +257,6 @@ public class BasicGame implements GameLoop {
     }
 
     private void tekenGalg() {
-        // Zwart vlak achter galgje.
         SaxionApp.drawRectangle(350, 450, 175, 180);
         for (int i = 0; i <= fouten; i++) {
             if (Objects.equals(galgStappen[i], "circle")) {
